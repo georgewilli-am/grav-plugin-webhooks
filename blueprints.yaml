@@ -5,11 +5,10 @@ icon: plug
 author:
   name: George Sumpster
   email: gsumpster@gmail.com
-homepage: https://github.com/george-sumpster/grav-plugin-webhooks
-demo: http://demo.yoursite.com
-keywords: grav, plugin, etc
-bugs: https://github.com/george-sumpster/grav-plugin-webhooks/issues
-readme: https://github.com/george-sumpster/grav-plugin-webhooks/blob/develop/README.md
+homepage: https://github.com/gsumpster/grav-plugin-webhooks
+keywords: grav, plugin, webhooks, slack
+bugs: https://github.com/gsumpster/grav-plugin-webhooks/issues
+readme: https://github.com/gsumpster/grav-plugin-webhooks/blob/develop/README.md
 license: MIT
 
 form:
