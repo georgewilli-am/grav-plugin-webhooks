@@ -15,17 +15,39 @@ license: MIT
 form:
   validation: strict
   fields:
-    enabled:
-      type: toggle
-      label: Plugin status
-      highlight: 1
-      default: 0
-      options:
-        1: Enabled
-        0: Disabled
-      validate:
-        type: bool
-    text_var:
-      type: text
-      label: Text Variable
-      help: Text to add to the top of a page
+    general:
+      type: section
+      title: General
+      fields:
+        enabled:
+          type: toggle
+          label: Plugin Status
+          highlight: 1
+          options:
+            1: Enabled
+            0: Disabled
+          validate:
+            type: bool
+        indiviual_hooks:
+          type: toggle
+          label: Indiviual URLs for each Hook
+          highlight: 1
+          options:
+            1: Enabled
+            0: Disabled
+          validate:
+            type: bool
+        webhook_url(s):
+          type: array
+          label: URL(s) for Webhook calls
+          help: This is used only if Indiviual URLs if set to false, otherwise each hook's url is used.
+          placeholder_value: "https://localhost/webhook_url"
+          value_only: true
+    hooks:
+      type: section
+      title: Hooks
+      fields:
+        hooks:
+          type: array
+          placeholder_key: Hook Name
+          placeholder_value: "http://localhost/webhook"

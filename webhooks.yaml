@@ -1,3 +1,13 @@
 enabled: true
+indiviual_hooks: false
 webhook_url(s):
-  - https://localhost/webhook/
+
+hooks:
+  onPageCreated:
+  onPageModified:
+  onPluginAdded:
+  onPluginUpdated:
+  onThemeChanged:
+
+collection_filter: false
+collections:
