@@ -10,7 +10,7 @@ use RocketTheme\Toolbox\Event\Event;
  */
 class WebhooksPlugin extends Plugin
 {
-    private HookClasses = array();
+    private $HookClasses = array();
 
     public static function getSubscribedEvents()
     {
@@ -25,21 +25,21 @@ class WebhooksPlugin extends Plugin
     public function onPluginsInitialized()
     {
         if($this->config->get('plugins.webhooks.indiviual_hooks')){
-          for($this->config->get('plugins.webhooks.hooks' as $hook => $url)){
+          foreach($this->config->get('plugins.webhooks.hooks') as $hook => $url){
             if($url != null || $url != false){
-              require(__DIR__ . '/hooks/' $key . '.php');
+              require(__DIR__ . '/hooks/' . $hook . '.php');
               $hookObj = new $hook();
               $hookObj->init($url);
-              HookClasses[] = $hookObj;
+              $HookClasses[] = $hookObj;
             }
           }
         }else{
-          for($this->config->get('plugins.webhooks.hooks') as $hook => $url){
+          foreach($this->config->get('plugins.webhooks.hooks') as $hook => $url){
             if($url != false){
-              require(__DIR__ . '/hooks/' $key . '.php');
+              require(__DIR__ . '/hooks/' . $hook . '.php');
               $hookObj = new $hook();
               $hookObj->init($this->config->get('plugins.webhooks.webhook_url(s)'));
-              HookClasses[] = $hookObj;
+              $HookClasses[] = $hookObj;
             }
           }
         }
@@ -50,7 +50,7 @@ class WebhooksPlugin extends Plugin
     }
 
     public function onShutdown(){
-      for($HookClasses as $hook){
+      foreach($HookClasses as $hook){
         $hook.process();
       }
     }

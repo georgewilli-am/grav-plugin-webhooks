@@ -1,5 +1,7 @@
 <?php
 
+namespace Grav\Plugin\WebHooks;
+
 use \Grav\Common\Grav;
 
 interface Hook
