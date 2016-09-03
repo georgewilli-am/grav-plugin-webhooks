@@ -3,11 +3,11 @@ indiviual_hooks: false
 webhook_url(s):
 
 hooks:
-  onPageCreated:
-  onPageModified:
-  onPluginAdded:
-  onPluginUpdated:
-  onThemeChanged:
+  - onPageCreated:
+  - onPageModified:
+  - onPluginAdded:
+  - onPluginUpdated:
+  - onThemeChanged:
 
 collection_filter: false
 collections:

@@ -1,14 +1,8 @@
 <?php
 
-namespace Grav\Plugin\WebHooks;
-
-use \Grav\Common\Grav;
-
 interface Hook
 {
-    protected $url;
-
-    public function getName();
+    public function __toString();
     public function init($url);
     public function process();
 }

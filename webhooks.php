@@ -1,58 +1,74 @@
 <?php
+
 namespace Grav\Plugin;
 
+use Grav\Common\Grav;
 use Grav\Common\Plugin;
-use RocketTheme\Toolbox\Event\Event;
 
 /**
- * Class WebhooksPlugin
- * @package Grav\Plugin
+ * Class WebhooksPlugin.
  */
 class WebhooksPlugin extends Plugin
 {
     private $HookClasses = array();
+    protected $grav;
 
     public static function getSubscribedEvents()
     {
         return [
-            'onPluginsInitialized' => ['onPluginsInitialized', 0]
+            'onPluginsInitialized' => ['onPluginsInitialized', 0],
         ];
     }
 
     /**
-     * Initialize the plugin
+     * Initialize the plugin.
      */
     public function onPluginsInitialized()
     {
-        if($this->config->get('plugins.webhooks.indiviual_hooks')){
-          foreach($this->config->get('plugins.webhooks.hooks') as $hook => $url){
-            if($url != null || $url != false){
-              require(__DIR__ . '/hooks/' . $hook . '.php');
-              $hookObj = new $hook();
-              $hookObj->init($url);
-              $HookClasses[] = $hookObj;
+        $this->grav = Grav::instance();
+
+        require_once __DIR__.'/util/util.php';
+        require_once __DIR__.'/hooks/hook.php';
+        
+        if ($this->config->get('plugins.webhooks.indiviual_hooks')) {
+            foreach ($this->config->get('plugins.webhooks.hooks') as $hook) {
+                $hookName = key($hook);
+                $hookURL = reset($hook);
+                if ((@include_once(__DIR__.'/hooks/'.$hookName.'.php')) !== false) {
+                    $hookObj = new $hookName();
+                    $hookObj->init($HookURL);
+                    $this->HookClasses[] = $hookObj;
+                } else {
+                    $this->grav['log']->warning('Failed to add '.$hookName.', could not find class.');
+                }
             }
-          }
-        }else{
-          foreach($this->config->get('plugins.webhooks.hooks') as $hook => $url){
-            if($url != false){
-              require(__DIR__ . '/hooks/' . $hook . '.php');
-              $hookObj = new $hook();
-              $hookObj->init($this->config->get('plugins.webhooks.webhook_url(s)'));
-              $HookClasses[] = $hookObj;
+        } else {
+            foreach ($this->config->get('plugins.webhooks.hooks') as $hook) {
+                if (reset($hook) !== 'false') {
+                    $hookName = key($hook);
+                    if ((@include_once(__DIR__.'/hooks/'.$hookName.'.php')) !== false) {
+                        $hookObj = new $hookName();
+                        $hookObj->init($this->config->get('plugins.webhooks.webhook_url(s)'));
+                        $this->HookClasses[] = $hookObj;
+                    } else {
+                        $this->grav['log']->warning('[WebHooks] Failed to add '.$hookName.', could not find class.');
+                    }
+                }
             }
-          }
         }
 
+        $this->grav['log']->debug('[WebHooks] Loaded '.count($this->HookClasses).' web hook(s).');
+        $this->grav['log']->debug('[WebHooks] '.implode(', ', array_values($this->HookClasses)));
+
         $this->enable([
-            'onShutdown' => ['onShutdown', 0]
+            'onShutdown' => ['onShutdown', 1],
         ]);
     }
 
-    public function onShutdown(){
-      foreach($HookClasses as $hook){
-        $hook.process();
-      }
+    public function onShutdown()
+    {
+        foreach ($this->HookClasses as $hook) {
+            $hook->process();
+        }
     }
-
 }
