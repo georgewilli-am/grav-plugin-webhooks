@@ -14,4 +14,13 @@ class util
 
         return $response;
     }
+
+    public static function build_request($hook, $objects){
+      $VAR_REPLACE = array('%PAGE_TITLE%'  => '->title',
+                           '%PAGE_SUMMARY' => '->summary',
+                           '%PAGE_URL%'    => '->url',
+                           '%PAGE_AUTHOR%' => '->header->author',
+                           '%PAGE_SLUG%'   => '->slug');
+
+    }
 }
