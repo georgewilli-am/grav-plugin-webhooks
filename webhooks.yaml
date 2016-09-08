@@ -11,3 +11,5 @@ hooks:
 
 collection_filter: false
 collections:
+
+request: '{"text": "This is a line of text.\nAnd this is another one."}'
